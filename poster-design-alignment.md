@@ -4,6 +4,7 @@
 >
 > **最后更新**：2026-03-26
 > **同步频率**：每两天一次到 GitHub
+> **GitHub 仓库**：https://github.com/icemagejin/Worklifebalance.git
 
 ---
 
