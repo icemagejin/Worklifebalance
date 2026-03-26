@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "aesthetic-daily-report",
+      "agentId": "aesthetic",
+      "name": "八字合盘海报生成",
+      "enabled": true,
+      "createdAtMs": 1772847000000,
+      "schedule": {
+        "expr": "10 9 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行今日八字合盘海报生成任务：\n\n## 完整工作流程（已验证）✅\n\n**步骤1：计算今日干支**\n- 年柱、月柱、日柱\n\n**步骤2：与大Boss八字合盘分析**\n- 大Boss八字：乙丑 丙戌 戊申\n- 分析吉凶运势\n\n**步骤3：生成对仗祝福语（6+6）**\n- 两句工整的祝福语，每句6个字\n- 根据今日干支寓意创作\n\n**步骤4：生成体现今日干支的背景图**\n- 使用 coze-image-gen 技能\n- 输入：今日干支寓意（如：火木相生）\n- 风格：现代国画写意，国画机制简约风，留白克制\n- 元素：一笔暖色光晕+几笔墨线\n- **约束：绝对禁止文字**\n\n**步骤5：合成完整海报**\n- 超大数字（今日日期）\n- 极小字英文日期（MARCH SATURDAY等）\n- 极小字干支（如：丙午·甲午）\n- 两行6字对仗祝福语\n- 使用 Python PIL 合成\n\n**工作流特点：**\n✅ 八字合盘分析，个性化定制\n✅ 对仗祝福语（6+6），更工整\n✅ 体现今日干支意境\n✅ 现代国画写意风格\n✅ 极简留白，iPhone全屏\n✅ 使用 coze-image-gen 生成背景\n\n**重要提示：**\n- 背景图使用 coze-image-gen 生成\n- prompt 要包含：国画风格、简约、留白、暖色光晕、墨线、禁止文字\n- 使用小清新设计风格\n- 海报发送到美学群"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "oc_95076f564f595dc80ae416c8221ad806"
+          }
+        }
+      }
+    },
+    {
+      "id": "aesthetic-github-sync",
+      "agentId": "aesthetic",
+      "name": "八字合盘海报 GitHub 备份",
+      "enabled": true,
+      "createdAtMs": 1773275600000,
+      "schedule": {
+        "expr": "0 0 */2 * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行八字合盘海报任务 GitHub 同步：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/sync-to-github.sh\n\n同步内容：\n- 审美对齐记录（poster-design-alignment.md）\n- 海报生成脚本（scripts/generate-poster.py）\n- Cron 配置（cron/jobs.json）\n- 记忆文件（memory/）\n\n注意：每两天自动同步一次，确保审美对齐结论不会丢失。"
+      },
+      "delivery": {
+        "mode": "none"
+      }
+    }
+  ]
+}
