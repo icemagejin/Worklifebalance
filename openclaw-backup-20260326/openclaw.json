@@ -1,0 +1,536 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.3.2",
+    "lastTouchedAt": "2026-03-06T09:59:12.847Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-03-06T09:59:12.787Z",
+    "lastRunVersion": "2026.3.2",
+    "lastRunCommand": "doctor",
+    "lastRunMode": "local"
+  },
+  "browser": {
+    "enabled": true,
+    "color": "#00AA00",
+    "executablePath": "/root/.cache/ms-playwright/chromium-1208/chrome-linux64/chrome",
+    "headless": false,
+    "noSandbox": true,
+    "defaultProfile": "openclaw",
+    "extraArgs": [
+      "--window-size=1920,1080",
+      "--test-type"
+    ]
+  },
+  "models": {
+    "providers": {
+      "coze": {
+        "baseUrl": "https://integration.coze.cn/api/v3",
+        "apiKey": "${COZE_WORKLOAD_IDENTITY_API_KEY}",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "glm-4-7-251222",
+            "name": "GLM 4.7",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "deepseek-v3-2-251201",
+            "name": "DeepSeek 3.2",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 96000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "deepseek-r1-250528",
+            "name": "DeepSeek R1",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 96000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "doubao-seed-1-8-251228",
+            "name": "豆包 1.8",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "glm-4-7-251222",
+            "name": "豆包 Vision Pro 32k",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 32000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "glm-4-7-251222",
+            "name": "豆包 1.5 Vision Pro",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          }
+        ]
+      },
+      "bailian": {
+        "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "apiKey": "sk-sp-0159e393f91948348ff1d8405d1c4884",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "glm-5",
+            "name": "GLM 5",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "qwen-vl-max",
+            "name": "Qwen VL Max",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "qwen-vl-plus",
+            "name": "Qwen VL Plus",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "qwen3-vl-plus",
+            "name": "Qwen3 VL Plus",
+            "reasoning": false,
+            "input": [
+              "text",
+              "image"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "coze/glm-4-7-251222"
+      },
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    },
+    "list": [
+      {
+        "id": "pm",
+        "name": "PM Agent",
+        "workspace": "/workspace/projects/workspace-pm",
+        "model": {
+          "primary": "coze/glm-4-7-251222"
+        },
+        "identity": {
+          "name": "PM Manager",
+          "emoji": "📊"
+        }
+      },
+      {
+        "id": "aesthetic",
+        "name": "Aesthetics Agent",
+        "workspace": "/workspace/projects/workspace-aesthetic",
+        "model": {
+          "primary": "coze/glm-4-7-251222"
+        },
+        "identity": {
+          "name": "Aesthetics Designer",
+          "emoji": "🎨"
+        },
+        "tools": {
+          "profile": "full"
+        }
+      },
+      {
+        "id": "socialmedia",
+        "name": "Social Media Agent",
+        "workspace": "/workspace/projects/workspace-socialmedia",
+        "model": {
+          "primary": "coze/glm-4-7-251222"
+        },
+        "identity": {
+          "name": "Social Media Manager",
+          "emoji": "📱"
+        },
+        "tools": {
+          "profile": "full"
+        }
+      },
+      {
+        "id": "fullstack",
+        "name": "Full Stack Agent",
+        "workspace": "/workspace/projects/workspace-fullstack",
+        "model": {
+          "primary": "coze/glm-4-7-251222"
+        },
+        "identity": {
+          "name": "Full Stack Developer",
+          "emoji": "💻"
+        }
+      },
+      {
+        "id": "devops",
+        "name": "DevOps Agent",
+        "workspace": "/workspace/projects/workspace-devops",
+        "model": {
+          "primary": "coze/glm-4-7-251222"
+        },
+        "identity": {
+          "name": "DevOps Engineer",
+          "emoji": "🔧"
+        },
+        "tools": {
+          "profile": "coding"
+        }
+      },
+      {
+        "id": "info",
+        "name": "Info Management Agent",
+        "workspace": "/workspace/projects/workspace-info",
+        "model": {
+          "primary": "coze/glm-4-7-251222"
+        },
+        "identity": {
+          "name": "Info Manager",
+          "emoji": "📁"
+        }
+      }
+    ]
+  },
+  "tools": {
+    "web": {
+      "search": {
+        "enabled": false
+      },
+      "fetch": {
+        "enabled": false
+      }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "devops",
+      "match": {
+        "channel": "feishu",
+        "accountId": "main",
+        "peer": {
+          "kind": "group",
+          "id": "oc_336869bb90292e2f64a546e3babfa485"
+        }
+      }
+    },
+    {
+      "agentId": "info",
+      "match": {
+        "channel": "feishu",
+        "accountId": "main",
+        "peer": {
+          "kind": "group",
+          "id": "oc_8c93d13434ddd14b62f1f0980e387967"
+        }
+      }
+    },
+    {
+      "agentId": "aesthetic",
+      "match": {
+        "channel": "feishu",
+        "accountId": "main",
+        "peer": {
+          "kind": "group",
+          "id": "oc_95076f564f595dc80ae416c8221ad806"
+        }
+      }
+    },
+    {
+      "agentId": "fullstack",
+      "match": {
+        "channel": "feishu",
+        "accountId": "main",
+        "peer": {
+          "kind": "group",
+          "id": "oc_9281fe3cfbdb71539a1b4da8bd7aa1ac"
+        }
+      }
+    },
+    {
+      "agentId": "pm",
+      "match": {
+        "channel": "feishu",
+        "accountId": "main"
+      }
+    },
+    {
+      "agentId": "socialmedia",
+      "match": {
+        "channel": "feishu",
+        "accountId": "main",
+        "peer": {
+          "kind": "group",
+          "id": "oc_04a41cd1e125dcd4165b65ad9d96885d"
+        }
+      }
+    }
+  ],
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "restart": true,
+    "ownerDisplay": "raw"
+  },
+  "channels": {
+    "feishu": {
+      "enabled": true,
+      "accounts": {
+        "main": {
+          "appId": "cli_a907edcff0785cb5",
+          "appSecret": "t2229c0w2naILX2CoIneefjeuaSxpYo6"
+        },
+        "default": {
+          "dmPolicy": "open",
+          "groupPolicy": "open",
+          "allowFrom": [
+            "*"
+          ]
+        }
+      }
+    }
+  },
+  "gateway": {
+    "port": 5000,
+    "mode": "local",
+    "bind": "loopback",
+    "controlUi": {
+      "enabled": true,
+      "allowedOrigins": [
+        "https://dev.coze.site"
+      ],
+      "dangerouslyDisableDeviceAuth": true
+    },
+    "auth": {
+      "mode": "token",
+      "token": "ace24b9c-8cd0-4259-9011-2328e8620e3d"
+    },
+    "trustedProxies": [
+      "::1",
+      "127.0.0.1"
+    ],
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    },
+    "nodes": {
+      "browser": {
+        "mode": "off"
+      }
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    },
+    "entries": {
+      "1password": {
+        "enabled": false
+      },
+      "apple-notes": {
+        "enabled": false
+      },
+      "apple-reminders": {
+        "enabled": false
+      },
+      "bear-notes": {
+        "enabled": false
+      },
+      "bird": {
+        "enabled": false
+      },
+      "blogwatcher": {
+        "enabled": false
+      },
+      "blucli": {
+        "enabled": false
+      },
+      "bluebubbles": {
+        "enabled": false
+      },
+      "camsnap": {
+        "enabled": false
+      },
+      "clawhub": {
+        "enabled": false
+      },
+      "eightctl": {
+        "enabled": false
+      },
+      "gemini": {
+        "enabled": false
+      },
+      "gifgrep": {
+        "enabled": false
+      },
+      "gog": {
+        "enabled": false
+      },
+      "goplaces": {
+        "enabled": false
+      },
+      "local-places": {
+        "enabled": false
+      },
+      "nano-banana-pro": {
+        "enabled": false
+      },
+      "nano-pdf": {
+        "enabled": false
+      },
+      "notion": {
+        "enabled": false
+      },
+      "obsidian": {
+        "enabled": false
+      },
+      "openai-image-gen": {
+        "enabled": false
+      },
+      "openai-whisper": {
+        "enabled": false
+      },
+      "openai-whisper-api": {
+        "enabled": false
+      },
+      "slack": {
+        "enabled": false
+      },
+      "songsee": {
+        "enabled": false
+      },
+      "sonoscli": {
+        "enabled": false
+      },
+      "spotify-player": {
+        "enabled": false
+      },
+      "things-mac": {
+        "enabled": false
+      },
+      "wacli": {
+        "enabled": false
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "feishu": {
+        "enabled": true
+      }
+    },
+    "installs": {}
+  }
+}

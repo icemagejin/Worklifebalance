@@ -1,0 +1,308 @@
+{
+  "version": 1,
+  "jobs": [
+    {
+      "id": "fe0157d9-fd50-4ef7-938d-73ebac95d49b",
+      "agentId": "pm",
+      "name": "PM AI新闻推送",
+      "enabled": true,
+      "createdAtMs": 1770880654605,
+      "updatedAtMs": 1774483357629,
+      "schedule": {
+        "expr": "0 8 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行AI新闻搜集任务：\n\n1. 运行 bash /workspace/projects/workspace-pm/scripts/gather-ai-news.sh 生成新闻文件\n2. 读取生成的文件内容（markdown和PDF）\n3. **重要**：检查文件中是否有Dan Koe的新内容（搜索标题包含\"Dan Koe\"或\"dankoe\"的部分）\n4. 如果有Dan Koe的新内容，必须：\n   - 详细阅读相关内容\n   - 生成至少500字的总结，包含：\n     * 视频核心观点\n     * 对大Boss的启发（用毒舌口吻）\n     * 可执行的建议\n   - 将总结插入到新闻文件的\"C梦的今日毒舌\"部分之前\n5. 整理所有内容，用毒舌评论的口吻发送给大Boss\n6. **附件**：发送时附上PDF版本文件（如果生成成功）\n\n**图片生成（按需）**：\n- 图片生成不自动化，按需手动执行\n- 如需为论文或概念生成信息图，运行：bash /workspace/projects/workspace-pm/scripts/generate-infocharts.sh\n- 图片生成需要30-60秒/张，请在非高峰时段手动生成\n\n注意：\n- 使用陈述+讽刺的评论风格\n- Dan Koe的总结至少500字，不能偷懒\n- 如果有多个dankoe视频，选最新的一个详细总结\n- PDF文件路径：/workspace/projects/workspace/ai-news/日期.pdf"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "direct"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774569600000,
+        "lastStatus": "ok",
+        "lastRunAtMs": 1774483200012,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 157617,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "pm-daily-report",
+      "agentId": "pm",
+      "name": "PM 项目管理日报",
+      "enabled": true,
+      "createdAtMs": 1772847000000,
+      "schedule": {
+        "expr": "5 9 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "使用 pm-daily-reporter skill 生成今日项目管理日报。\n\n请按照以下步骤执行：\n\n1. 运行 pm-daily-reporter skill，执行命令：\n   cd /workspace/projects/workspace-pm/skills/pm-daily-reporter && npx tsx index.ts\n\n2. Skill 将会自动：\n   - 从配置的渠道检索信息（文档库、飞书群组等）\n   - 根据重要性和时效性为信息计分\n   - 提取任务状态和进度\n   - 生成结构化的项目管理日报\n\n3. 日报生成后会保存在：\n   /workspace/projects/workspace-pm/reports/daily/YYYY-MM-DD.md\n\n4. 读取生成的日报文件内容\n\n5. 将日报内容通过私聊发送给大Boss\n\n**说明**：\n- pm-daily-reporter 是 PM Agent 专属技能，包含智能计分系统\n- 计分维度：重要性（40%）、时效性（30%）、完成度（30%）\n- 检索渠道：文档库、各 Agent 群组、任务日志\n- 日报包含：关键指标、重点关注、任务进度、协作总结、风险分析、明日计划"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "direct"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774573500000,
+        "lastStatus": "ok",
+        "lastRunAtMs": 1774487100009,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 116148,
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered",
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1774487216157
+    },
+    {
+      "id": "aesthetic-daily-report",
+      "agentId": "aesthetic",
+      "name": "Aesthetics 设计日报",
+      "enabled": true,
+      "createdAtMs": 1772847000000,
+      "schedule": {
+        "expr": "10 9 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "生成今日美学设计日报：\n\n## 今日美学设计日报\n\n**时间**：今日 09:10\n**Agent**：Aesthetics Designer\n**设计风格**：小清新\n\n### 🎨 今日视觉设计\n- 完成的视觉设计任务\n- 创作的图片和图表\n- 使用的设计元素（配色、线条、氛围）\n\n### 💡 美学建议\n- 提供的视觉建议\n- 设计灵感收集\n- 风格优化建议\n\n### 🖼️ 设计作品\n- 如果有生成图片，描述作品内容\n- 作品风格和设计思路\n\n### ⏰ 明日计划\n- 待完成的设计任务\n- 计划创作的设计作品\n\n### 📌 注意事项\n- 任何需要用户确认的设计方案\n- 任何设计问题或疑问\n\n请用温柔、细致的风格生成日报，发送到美学群。"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "chat:oc_95076f564f595dc80ae416c8221ad806"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774573800000,
+        "lastStatus": "ok",
+        "lastRunAtMs": 1774487400007,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 25624,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1774487425631
+    },
+    {
+      "id": "fullstack-daily-report",
+      "agentId": "fullstack",
+      "name": "Full Stack 开发日报",
+      "enabled": true,
+      "createdAtMs": 1772847000000,
+      "schedule": {
+        "expr": "15 9 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "生成今日全栈开发日报：\n\n## 今日全栈开发日报\n\n**时间**：今日 09:15\n**Agent**：Full Stack Developer\n\n### 💻 今日开发任务\n- 完成的功能开发\n- 编写的代码和文件\n- 前端/后端工作\n\n### 🔧 技术方案\n- 设计的技术架构\n- 技术选型和工具\n- API 设计和实现\n\n### 🐛 Bug 修复\n- 修复的问题\n- 解决方案\n- 影响范围\n\n### 📦 部署情况\n- 部署的功能\n- 部署状态\n- 任何部署问题\n\n### ⏰ 明日计划\n- 待开发的功能\n- 计划完成的任务\n\n### 📌 注意事项\n- 任何技术难点\n- 任何阻塞问题\n- 需要用户提供的信息\n\n请用专业、技术导向的风格生成日报，发送到全栈群。"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "chat:oc_9281fe3cfbdb71539a1b4da8bd7aa1ac"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774574100000,
+        "lastStatus": "ok",
+        "lastRunAtMs": 1774487700007,
+        "lastRunStatus": "ok",
+        "lastDurationMs": 113086,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1774487813093
+    },
+    {
+      "id": "devops-daily-report",
+      "agentId": "devops",
+      "name": "DevOps 运维日报",
+      "enabled": true,
+      "createdAtMs": 1772847000000,
+      "schedule": {
+        "expr": "20 9 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "生成今日系统运维日报：\n\n## 今日系统运维日报\n\n**时间**：今日 09:20\n**Agent**：DevOps Engineer\n\n### 🏥 系统健康状态\n- Gateway 状态（端口 5000）\n- 各 Agent 运行状态\n- 系统资源使用情况（CPU、内存、磁盘）\n\n### 📊 监控异常\n- 监控到的异常和问题\n- 任何错误或警告\n- 性能指标异常\n\n### 🔧 故障处理\n- 处理的故障\n- 修复措施\n- 预防措施\n\n### 🚀 部署情况\n- 部署的服务\n- 部署状态\n- 任何部署问题\n\n### 📋 日志分析\n- 今日日志关键信息\n- 任何值得关注的问题\n\n### ⏰ 明日计划\n- 待处理的运维任务\n- 计划的维护工作\n\n### 📌 注意事项\n- 任何需要用户关注的系统问题\n- 任何潜在风险\n- 需要用户操作的引导\n\n请用专业但易懂的风格生成日报，发送到运维群。"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "oc_336869bb90292e2f64a546e3babfa485"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774574400000,
+        "lastStatus": "error",
+        "lastRunAtMs": 1774488000009,
+        "lastRunStatus": "error",
+        "lastDurationMs": 50170,
+        "lastError": "Delivering to Feishu requires target <chatId|user:openId|chat:chatId>",
+        "lastDeliveryStatus": "unknown",
+        "consecutiveErrors": 1
+      },
+      "updatedAtMs": 1774488050179
+    },
+    {
+      "id": "info-daily-report",
+      "agentId": "info",
+      "name": "Info 信息管理日报",
+      "enabled": true,
+      "createdAtMs": 1772847000000,
+      "schedule": {
+        "expr": "25 9 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "生成今日信息管理日报：\n\n## 今日信息管理日报\n\n**时间**：今日 09:25\n**Agent**：Info Manager\n\n### 📊 今日信息统计\n- 收集的信息总数\n- 按类别统计（工作、学习、日程、其他）\n\n### 📁 分类汇总\n- 工作信息汇总\n- 学习笔记汇总\n- 日程安排汇总\n- 其他信息汇总\n\n### 📅 日程提醒\n- 今日日程列表\n- 明日重要日程提醒\n\n### 🔍 信息检索\n- 今日检索记录\n- 常用检索关键词\n\n### 📋 归档情况\n- 归档的文件数量\n- 归档的组织结构\n\n### ⏰ 明日计划\n- 待整理的信息\n- 计划的分类工作\n\n### 📌 注意事项\n- 任何需要用户关注的信息\n- 任何日程冲突或提醒\n- 信息检索建议\n\n请用条理清晰、分类准确的风格生成日报，发送到信息管理群。"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "oc_8c93d13434ddd14b62f1f0980e387967"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774574700000,
+        "lastStatus": "error",
+        "lastRunAtMs": 1774488300007,
+        "lastRunStatus": "error",
+        "lastDurationMs": 56513,
+        "lastError": "Delivering to Feishu requires target <chatId|user:openId|chat:chatId>",
+        "lastDeliveryStatus": "unknown",
+        "consecutiveErrors": 1
+      },
+      "updatedAtMs": 1774488356520
+    },
+    {
+      "id": "info-daily-archive",
+      "agentId": "info",
+      "name": "Info Agent 每日归档",
+      "enabled": true,
+      "createdAtMs": 1774489700000,
+      "schedule": {
+        "expr": "55 23 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行每日归档任务：\n\n运行 bash /workspace/projects/workspace-info/scripts/daily-archive.sh 归档今日笔记到 archive 目录。"
+      },
+      "delivery": {
+        "mode": "none"
+      },
+      "state": {
+        "nextRunAtMs": 1774565700000,
+        "lastStatus": "pending"
+      }
+    },
+    {
+      "id": "socialmedia-daily-report",
+      "agentId": "socialmedia",
+      "name": "Social Media 日报扫描",
+      "enabled": true,
+      "createdAtMs": 1774428993119,
+      "schedule": {
+        "expr": "0 5 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行社交媒体日报扫描任务：\n\n1. 检查各社交平台账号状态\n2. 分析昨日内容表现数据\n3. 发现热门话题和趋势\n4. 生成社交媒体运营日报\n5. 将日报发送给 PM Agent\n\n请用活泼、数据驱动的风格生成日报。"
+      },
+      "delivery": {
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "chat:oc_04a41cd1e125dcd4165b65ad9d96885d"
+          }
+        }
+      },
+      "state": {
+        "nextRunAtMs": 1774558800000,
+        "lastRunAtMs": 1774472400131,
+        "lastRunStatus": "ok",
+        "lastStatus": "ok",
+        "lastDurationMs": 75180,
+        "lastDelivered": false,
+        "lastDeliveryStatus": "not-delivered",
+        "consecutiveErrors": 0
+      },
+      "updatedAtMs": 1774472475311
+    }
+  ]
+}
