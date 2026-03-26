@@ -28,7 +28,7 @@ CURRENT_TIME=$(date +"%Y-%m-%d %H:%M")
 git commit -m "sync: 八字合盘海报任务及审美对齐记录 - ${CURRENT_TIME}" || echo "📝 没有新的更改"
 
 # 推送到 GitHub
-git push origin main 2>/dev/null || echo "⚠️ 推送失败（可能是第一次提交或分支名不同）"
+git push origin master 2>/dev/null || echo "⚠️ 推送失败（可能是网络或权限问题）"
 
 echo "✅ 同步完成！"
 echo "📊 提交时间：${CURRENT_TIME}"

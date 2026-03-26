@@ -48,7 +48,15 @@
         "message": "执行八字合盘海报任务 GitHub 同步：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/sync-to-github.sh\n\n同步内容：\n- 审美对齐记录（poster-design-alignment.md）\n- 海报生成脚本（scripts/generate-poster.py）\n- Cron 配置（cron/jobs.json）\n- 记忆文件（memory/）\n\n注意：每两天自动同步一次，确保审美对齐结论不会丢失。"
       },
       "delivery": {
-        "mode": "none"
+        "mode": "announce",
+        "target": {
+          "channel": "feishu",
+          "accountId": "main",
+          "peer": {
+            "kind": "group",
+            "id": "oc_95076f564f595dc80ae416c8221ad806"
+          }
+        }
       }
     }
   ]
