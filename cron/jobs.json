@@ -58,6 +58,27 @@
           }
         }
       }
+    },
+    {
+      "id": "aesthetic-diary",
+      "agentId": "aesthetic",
+      "name": "美学日记生成",
+      "enabled": true,
+      "createdAtMs": 1773275600000,
+      "schedule": {
+        "expr": "0 20 * * *",
+        "kind": "cron",
+        "tz": "Asia/Shanghai"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "执行美学日记生成任务：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/generate-diary.sh\n\n日记内容包括：\n- 今日工作内容\n- 美学感知与发现\n- 创作记录\n- 学习与成长\n- 今日感悟\n- 明日计划\n\n生成后运行：bash /workspace/projects/workspace-aesthetic/scripts/sync-diary-to-github.sh\n\n同步到 GitHub dailyrepo/aesthetic-journal/ 文件夹下。"
+      },
+      "delivery": {
+        "mode": "none"
+      }
     }
   ]
 }
