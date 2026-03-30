@@ -16,7 +16,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "执行今日八字合盘海报生成任务：\n\n## 完整工作流程（已验证）✅\n\n**步骤1：计算今日干支**\n- 年柱、月柱、日柱\n\n**步骤2：与大Boss八字合盘分析**\n- 大Boss八字：乙丑 丙戌 戊申\n- 分析吉凶运势\n\n**步骤3：生成对仗祝福语（6+6）**\n- 两句工整的祝福语，每句6个字\n- 根据今日干支寓意创作\n\n**步骤4：生成体现今日干支的背景图**\n- 使用 coze-image-gen 技能\n- 输入：今日干支寓意（如：火木相生）\n- 风格：现代国画写意，国画机制简约风，留白克制\n- 元素：一笔暖色光晕+几笔墨线\n- **约束：绝对禁止文字**\n\n**步骤5：合成完整海报**\n- 超大数字（今日日期）\n- 极小字英文日期（MARCH SATURDAY等）\n- 极小字干支（如：丙午·甲午）\n- 两行6字对仗祝福语\n- 使用 Python PIL 合成\n\n**工作流特点：**\n✅ 八字合盘分析，个性化定制\n✅ 对仗祝福语（6+6），更工整\n✅ 体现今日干支意境\n✅ 现代国画写意风格\n✅ 极简留白，iPhone全屏\n✅ 使用 coze-image-gen 生成背景\n\n**重要提示：**\n- 背景图使用 coze-image-gen 生成\n- prompt 要包含：国画风格、简约、留白、暖色光晕、墨线、禁止文字\n- 使用小清新设计风格\n- 海报发送到美学群"
+        "message": "执行今日八字合盘海报生成任务（2026-03-30 最终版）：\n\n## ⭐ 完整工作流程\n\n参考文档：/workspace/projects/workspace-aesthetic/WORKFLOW.md\n\n### 步骤1：获取今日干支 + 宜忌\n- 使用 Coze web search 搜索今日八字\n- 提取：公历、农历、干支、宜、忌\n\n### 步骤2：生成利弊对仗\n- 利：从\"宜\"选关键词 → 改写6-8字\n- 弊：从\"忌\"选关键词 → 改写6-8字\n- 要求：字数相等、对仗工整\n\n### 步骤3：生成轻盈背景图\n- 使用 coze-image-gen\n- Prompt: 纯抽象水墨，90%白色背景\n- 约束：绝对禁止文字、毛笔字、印章\n- 输出: /tmp/bg_YYYY-MM-DD_pure.jpg\n\n### 步骤4：VL 分析背景（待配置）\n- 状态：等待 VL_API_KEY\n- 默认：center（居中）\n\n### 步骤5：生成海报\n- 脚本: poster_template_fd_v2.py（Frontend Design 版）\n- 字体: 思源宋体粗体（480px） + 文泉驿正黑锐利（40px）\n- 颜色: 深墨色系\n- 输出: posters/poster-YYYY-MM-DD.jpg\n\n### 步骤6：PIL 基本检查\n- 检查尺寸、深色像素、文字区域\n\n### 步骤7：发送到美学群\n- 目标：oc_95076f564f595dc80ae416c8221ad806\n\n### 步骤8：记录到日记\n- 路径：memory/YYYY-MM-DD.md\n\n---\n\n**重要提醒**：\n- 背景必须纯抽象水墨，禁止文字/印章\n- 使用 Frontend Design 字体方案\n- 避免重叠（数字和农历）\n- 留白 > 60%"
       },
       "delivery": {
         "mode": "announce",
@@ -45,7 +45,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "执行八字合盘海报任务 GitHub 同步：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/sync-to-github.sh\n\n同步内容：\n- 审美对齐记录（poster-design-alignment.md）\n- 海报生成脚本（scripts/generate-poster.py）\n- Cron 配置（cron/jobs.json）\n- 记忆文件（memory/）\n\n注意：每两天自动同步一次，确保审美对齐结论不会丢失。"
+        "message": "执行八字合盘海报任务 GitHub 同步：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/sync-to-github.sh\n\n同步内容：\n- 工作流文档（WORKFLOW.md）\n- 字体策略（docs/font-strategy.md）\n- VL 实施计划（docs/vl-implementation-plan.md）\n- 海报生成脚本（scripts/poster_template_fd_v2.py）\n- Cron 配置（cron/jobs.json）\n- 记忆文件（memory/）\n\n注意：每两天自动同步一次，确保工作流不会丢失。"
       },
       "delivery": {
         "mode": "announce",
