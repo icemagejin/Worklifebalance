@@ -1,268 +1,215 @@
-# 八字合盘海报工作流（2026-03-30 最终版）
+# 美学 Agent 工作流
 
-## 🎯 工作流目标
+## 每日任务
 
-每日 09:10 自动生成高质量八字合盘海报，发送到美学群。
+### 1. 八字合盘海报生成（09:10）
 
----
+**触发方式**：Cron 任务（10 9 * * *）
 
-## 📋 完整工作流
+**工作流程**：
 
-### 步骤1：获取今日干支 + 宜忌
+#### 步骤 1：获取今日干支 + 宜忌
+- 使用 Coze web search 搜索今日八字
+- 提取：公历、农历、干支、宜、忌
 
-**时间**: 09:10
-
-**操作**:
-```bash
-# 使用 Coze web search 搜索今日八字
-coze_web_search(query="2026年3月30日 八字 干支 宜忌")
-```
-
-**提取数据**:
-- 公历日期（2026年3月30日 星期一）
-- 农历日期（二月十二）
-- 干支（丙午 · 辛卯 · 癸卯）
-- 宜：立券、交易、纳财、会亲友、出行
-- 忌：嫁娶、动土、修造、入宅、破土
-
----
-
-### 步骤2：生成利弊对仗
-
-**规则**:
+#### 步骤 2：生成利弊对仗
 - 利：从"宜"选关键词 → 改写6-8字
 - 弊：从"忌"选关键词 → 改写6-8字
-- 要求：字数相等、结构相同、对仗工整
+- 要求：字数相等、对仗工整
 
-**示例**:
-- 宜：立券交易 → 宜 立券交易兴（6字）
-- 忌：嫁娶出行 → 忌 嫁娶远出行（6字）
+#### 步骤 3：生成轻盈背景图
+- 工具：`coze-image-gen`
+- Prompt：
+  ```
+  Minimalist wabi-sabi style, abstract color fields,
+  muted earth tones, 90% white empty space,
+  very subtle ink wash in one corner,
+  no mountains, no water, no specific objects,
+  pure abstraction with natural imperfections, 1080x1920
+  ```
+- 输出：`/tmp/bg_YYYY-MM-DD_wabisabi.jpg`
 
----
+#### 步骤 4：分析背景布局（水平 + 垂直）
+- 使用 PIL 分析背景图形位置
+- 垂直方向：上中下（各33%）
+- 水平方向：左中右（各33%）
+- 判断布局类型：right_bottom / left_bottom / right_top / left_top / center / full
 
-### 步骤3：生成轻盈背景图
-
-**工具**: coze-image-gen
-
-**风格**: 纯抽象水墨，90%白色背景
-
-**Prompt**:
-```
-Minimalist pure ink wash painting, extremely light and ethereal,
-soft ink strokes only, absolutely no text, no characters, no calligraphy,
-no Chinese characters, no seal stamp, no red seal, no writing, no letters,
-pure abstract ink patterns, mostly white space, 90% white background,
-1080x1920
-```
-
-**约束**:
-- ❌ 绝对禁止文字
-- ❌ 绝对禁止毛笔字
-- ❌ 绝对禁止印章
-- ✅ 一角构图
-- ✅ 大量留白（>60%）
-- ✅ 轻盈淡雅
-
-**输出**: `/tmp/bg_YYYY-MM-DD_pure.jpg`
-
----
-
-### 步骤4：VL 分析背景（待配置）
-
-**状态**: 等待 VL_API_KEY 配置
-
-**操作**:
-```python
-# 用 VL 模型分析背景布局
-layout_type = analyze_background_layout(bg_path)
-# 返回: right_bottom | left_bottom | center | full
-```
-
-**默认**: center（居中）
-
----
-
-### 步骤5：生成海报
-
-**脚本**: `/workspace/projects/workspace-aesthetic/scripts/poster_template_fd_v2.py`
-
-**字体方案（Frontend Design 原则）**:
-- **展示字体**: 思源宋体粗体（480px）
-  - 路径: `/usr/share/fonts/opentype/noto/NotoSerifCJK-Bold.ttc`
-  - 特点: 优雅、有书法感、东方美学
-  - 用途: 超大数字（视觉焦点）
-
-- **正文字体**: 文泉驿正黑锐利（40px）
-  - 路径: `/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc`
-  - 特点: 现代、锐利、有力度
-  - 用途: 农历、干支、利弊
-
-- **英文字体**: 文泉驿正黑（24px）
-  - 路径: `/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc`
-  - 特点: 现代、清晰
-  - 用途: 英文月份、星期
-
-**颜色方案**:
-- 主色: (20, 15, 10) - 深墨色
-- 次色: (55, 45, 35) - 中深灰
-- 强调色: (40, 32, 25) - 深棕
-
-**布局参数**:
-- 英文月份: (居中, y=110)
-- 超大数字: (居中, y=280, size=480px)
-- 农历: (居中, y=900, size=40px)
-- 干支: (居中, y=1000, size=40px)
-- 利弊: (居中, y=底部-250, size=40px)
-
-**执行命令**:
+**脚本**：
 ```bash
-python3 /workspace/projects/workspace-aesthetic/scripts/poster_template_fd_v2.py \
-  /tmp/bg_YYYY-MM-DD_pure.jpg \
+python3 analyze_background.py /tmp/bg_YYYY-MM-DD_wabisabi.jpg
+```
+
+#### 步骤 5：智能排版（避开图形）
+- 根据布局类型调整文字位置
+- 右上角有图形 → 文字偏左（x=0.35）
+- 右下角有图形 → 文字偏左 + 上移
+- 左上角有图形 → 文字偏右 + 下移
+- 左下角有图形 → 文字偏右 + 上移
+
+**脚本**：
+```bash
+python3 poster_template_final.py \
+  /tmp/bg_YYYY-MM-DD_wabisabi.jpg \
   /workspace/projects/workspace-aesthetic/posters/poster-YYYY-MM-DD.jpg \
-  '{"month":"MAR","week":"MON","date":"30","nongli":"二月十二","bazi":"丙午 · 辛卯 · 癸卯","li":"立券交易兴","bi":"嫁娶远出行"}' \
-  center
+  data.json \
+  right_bottom
 ```
 
-**输出**: `/workspace/projects/workspace-aesthetic/posters/poster-YYYY-MM-DD.jpg`
+#### 步骤 6：验证文字不重叠
+- 检查文字区域深色比例（<15%）
+- 检查文字与背景图形的重叠
+- 确认留白充足（>60%）
 
----
-
-### 步骤6：PIL 基本检查
-
-**脚本**: `/workspace/projects/workspace-aesthetic/check_image.py`
-
-**检查项**:
-- 尺寸: 1080x1920
-- 深色像素比例: 5-10%（轻盈）
-- 文字区域: 8-12%（正常）
-
-**执行**:
+**脚本**：
 ```bash
-python3 /workspace/projects/workspace-aesthetic/check_image.py poster_path
+python3 validate_poster.py /workspace/projects/workspace-aesthetic/posters/poster-YYYY-MM-DD.jpg
+```
+
+#### 步骤 7：发送到美学群
+- 目标：`oc_95076f564f595dc80ae416c8221ad806`
+
+#### 步骤 8：记录到日记
+- 路径：`dailyrepo/aesthetic-journal/YYYY-MM-DD.md`
+
+---
+
+### 2. 美学日记生成（20:00）
+
+**触发方式**：Cron 任务（0 20 * * *）
+
+**工作流程**：
+
+#### 步骤 1：生成日记模板
+- 运行脚本：`bash scripts/generate-diary.sh`
+- 生成路径：`diary/aesthetic-journal/YYYY-MM-DD.md`
+
+#### 步骤 2：填充内容
+- 今日工作内容
+- 美学感知与发现
+- 创作记录
+- 学习与成长
+- 今日感悟
+- 明日计划
+
+#### 步骤 3：同步到 GitHub
+- 运行脚本：`bash scripts/sync-diary-to-github.sh`
+- 同步路径：`dailyrepo/aesthetic-journal/`
+
+#### 步骤 4：同步到 Notion（可选）
+- 运行脚本：`bash scripts/sync-diary-to-notion.sh`
+- 需要配置环境变量：
+  - `NOTION_API_KEY`
+  - `NOTION_DATABASE_ID`
+
+---
+
+### 3. GitHub 备份（每两天 00:00）
+
+**触发方式**：Cron 任务（0 0 */2 * *）
+
+**工作流程**：
+
+#### 步骤 1：同步工作流文件
+- 运行脚本：`bash scripts/sync-to-github.sh`
+
+#### 步骤 2：同步内容
+- 工作流文档（WORKFLOW.md）
+- 海报生成脚本（scripts/*.py）
+- Cron 配置（cron/jobs.json）
+- 记忆文件（memory/）
+
+---
+
+## 重要提醒
+
+### 背景图生成
+- 使用"wabi-sabi style"关键词，避免"Chinese ink wash painting"
+- 明确禁止"no mountains, no water, no specific objects"
+- 确保抽象、极简、留白充足
+
+### 背景图分析
+- **必须同时考虑水平和垂直方向**
+- 只分析一个方向会遗漏问题
+- 图形可能在角落（如右上角）
+
+### 布局与验证
+- 根据实际图形位置动态调整文字位置
+- 验证要有针对性，检查具体区域
+- 文字区域深色比例应 <15%
+
+### 避免重复错误
+- 不能跳过 VL 分析步骤
+- 不能跳过验证步骤
+- 分析必须完整（水平 + 垂直）
+- 每日生成前自我审查：是否遵循了完整工作流？
+
+---
+
+## Cron 任务列表
+
+| 任务 ID | 名称 | 时间 | 状态 |
+|---------|------|------|------|
+| aesthetic-daily-report | 八字合盘海报生成 | 09:10 | ✅ |
+| aesthetic-diary | 美学日记生成 | 20:00 | ✅ |
+| aesthetic-github-sync | GitHub 备份 | 每两天 00:00 | ✅ |
+
+---
+
+## 脚本列表
+
+| 脚本 | 用途 |
+|------|------|
+| scripts/generate-diary.sh | 生成美学日记 |
+| scripts/sync-diary-to-github.sh | 同步日记到 GitHub |
+| scripts/sync-diary-to-notion.sh | 同步日记到 Notion |
+| scripts/analyze_background.py | 分析背景布局 |
+| scripts/poster_template_final.py | 生成海报 |
+| scripts/validate_poster.py | 验证海报质量 |
+
+---
+
+## 环境变量
+
+- `COZE_API_KEY`：Coze 图像生成 API
+- `VL_API_KEY`：视觉语言模型 API（待配置）
+- `NOTION_API_KEY`：Notion API（可选）
+- `NOTION_DATABASE_ID`：Notion 数据库 ID（可选）
+
+---
+
+## 文件结构
+
+```
+/workspace/projects/workspace-aesthetic/
+├── cron/
+│   └── jobs.json                    # Cron 任务配置
+├── dailyrepo/
+│   ├── YYYY-MM-DD-poster-summary.md # 海报制作总结
+│   └── aesthetic-journal/           # 美学日记
+│       └── YYYY-MM-DD.md
+├── diary/
+│   └── aesthetic-journal/           # 本地日记
+│       └── YYYY-MM-DD.md
+├── memory/
+│   └── YYYY-MM-DD.md                # 每日记忆
+├── posters/
+│   └── poster-YYYY-MM-DD.jpg        # 海报文件
+└── scripts/
+    ├── generate-diary.sh            # 生成日记
+    ├── sync-diary-to-github.sh      # 同步到 GitHub
+    ├── sync-diary-to-notion.sh      # 同步到 Notion
+    ├── analyze_background.py        # 分析背景
+    ├── poster_template_final.py     # 生成海报
+    └── validate_poster.py           # 验证海报
 ```
 
 ---
 
-### 步骤7：发送到美学群
+## 更新日志
 
-**目标**: `oc_95076f564f595dc80ae416c8221ad806`
-
-**操作**:
-```python
-message(channel="feishu", media=poster_path)
-message(channel="feishu", message="设计说明...")
-```
-
----
-
-### 步骤8：记录到日记
-
-**路径**: `/workspace/projects/workspace-aesthetic/memory/YYYY-MM-DD.md`
-
-**内容**:
-- 今日八字
-- 创作过程
-- 版本迭代记录
-- Frontend Design 应用
-- 技术实现
-- 问题与改进
-
----
-
-## 🔧 Cron 配置
-
-**文件**: `/workspace/projects/workspace-aesthetic/cron/jobs.json`
-
-**任务**: `aesthetic-daily-report`
-
-**执行时间**: 每天 09:10
-
-**Agent**: aesthetic
-
-**Payload**:
-```json
-{
-  "kind": "agentTurn",
-  "message": "执行今日八字合盘海报生成任务..."
-}
-```
-
----
-
-## 📁 关键文件
-
-**脚本**:
-- `/workspace/projects/workspace-aesthetic/scripts/poster_template_fd_v2.py` - 主脚本（Frontend Design 版）
-- `/workspace/projects/workspace-aesthetic/check_image.py` - PIL 检查
-
-**文档**:
-- `/workspace/projects/workspace-aesthetic/docs/font-strategy.md` - 字体策略
-- `/workspace/projects/workspace-aesthetic/docs/vl-implementation-plan.md` - VL 实施计划
-- `/workspace/projects/workspace-aesthetic/WORKFLOW.md` - 本文档
-
-**输出**:
-- `/workspace/projects/workspace-aesthetic/posters/` - 海报输出目录
-- `/workspace/projects/workspace-aesthetic/memory/YYYY-MM-DD.md` - 每日日记
-
----
-
-## 🎨 Frontend Design 原则
-
-### 核心原则
-
-1. **避免通用字体**
-   - ❌ 不使用 Inter, Arial, Roboto
-   - ✅ 使用思源宋体、文泉驿正黑
-
-2. **选择独特字体**
-   - ✅ 展示字体有视觉冲击力（思源宋体粗体）
-   - ✅ 正文字体清晰易读（文泉驿正黑锐利）
-
-3. **粗细对比**
-   - ✅ 展示字体：粗体（480px）
-   - ✅ 正文字体：锐利（40px）
-
-4. **颜色有质感**
-   - ✅ 深墨色系
-   - ✅ 避免纯黑
-
-5. **空间有层次**
-   - ✅ 大量留白（>60%）
-   - ✅ 块面结构清晰
-
----
-
-## 🚀 后续优化
-
-### 1. 配置 VL_API_KEY
-```bash
-export VL_API_KEY="豆包 Vision Pro API 密钥"
-```
-
-启用后：
-- VL 分析背景布局
-- VL 验证海报质量
-- 自动调整参数
-- 评分机制（≥85分才发送）
-
-### 2. 动态字体方案
-根据日期变化字体风格，每天都有新鲜感。
-
-### 3. 自动化迭代
-配置 VL_API_KEY 后，最多迭代5次，直到评分≥85分。
-
----
-
-## 📝 版本历史
-
-### 2026-03-30 最终版（fd2）
-- 字体：思源宋体粗体 + 文泉驿正黑锐利
-- 背景：纯抽象水墨（90%白色）
-- 修复：调整字号和位置，避免重叠
-- 评分：85/100
-
----
-
-**更新时间**: 2026-03-30
-**维护者**: Aesthetics Agent
-**质量标准**: Frontend Design 原则
+### 2026-04-01
+- 修复背景图分析问题：必须同时考虑水平和垂直方向
+- 创建 WORKFLOW.md 文档
+- 添加 Notion 同步脚本
+- 完善美学日记生成流程
