@@ -132,3 +132,61 @@
 > - 布局动态调整
 > - 字号动态计算
 > - 块面结构动态形成
+
+---
+
+## 2026-03-31 工作流与代码优化
+
+### 遇到的问题
+
+#### 1. 工作流不完整 ❌
+- **问题**：跳过了 VL 分析步骤，直接生成海报
+- **后果**：生成了方图而非竖图，无法智能避让图形
+- **教训**：必须严格按照 HEARTBEAT.md 的完整工作流执行
+
+#### 2. PIL 文字定位错误 ❌
+- **问题**：使用 `y + height` 导致文字重叠（MAR TUE 叠在 31 下面）
+- **正确做法**：使用 `textbbox()` 的 `bbox[3]`（bottom）作为下一行的起点
+```python
+# 错误
+next_y = y + height
+
+# 正确
+text_bbox = draw.textbbox((x, y), text, font=font)
+next_y = text_bbox[3] + margin
+```
+
+#### 3. 表达不自然 ❌
+- **问题**：副标题 "MAR TUE" 表达奇怪
+- **改进**：改为中文 "3月31日 · 周二"
+- **原因**：更符合中文表达习惯
+
+#### 4. 排版层次不清晰 ❌
+- **改进**：
+  - 主日期：806px（height * 0.35）
+  - 副标题：55px（width * 0.032）
+  - 形成明显的视觉层次
+  - 间距优化，避免拥挤
+
+### 学到的经验
+
+#### PIL 文字定位（重要）
+```python
+# 绘制文字前，先计算 bounding box
+text_bbox = draw.textbbox((x, y), text, font=font)
+# text_bbox 返回 (left, top, right, bottom)
+
+# 计算下一行位置时，使用 bbox[3]（bottom）
+next_y = text_bbox[3] + margin
+```
+
+#### 完整工作流（严格执行）
+1. 获取今日干支 + 宜忌
+2. 生成利弊对仗（6-8字，字数相等）
+3. 生成1080x1920竖版背景图
+4. **VL分析背景图形位置** ← 关键！
+5. 智能排版（避让图形）
+6. VL验证文字不重叠
+
+### 总结文件
+- `/workspace/projects/workspace-aesthetic/dailyrepo/2026-03-31-poster-summary.md`
