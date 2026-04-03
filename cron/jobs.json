@@ -4,7 +4,7 @@
     {
       "id": "aesthetic-daily-report",
       "agentId": "aesthetic",
-      "name": "八字合盘海报生成",
+      "name": "八字合盘海报生成（现代设计版）",
       "enabled": true,
       "createdAtMs": 1772847000000,
       "schedule": {
@@ -16,17 +16,14 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "执行今日八字合盘海报生成任务（2026-03-30 最终版）：\n\n## ⭐ 完整工作流程\n\n参考文档：/workspace/projects/workspace-aesthetic/WORKFLOW.md\n\n### 步骤1：获取今日干支 + 宜忌\n- 使用 Coze web search 搜索今日八字\n- 提取：公历、农历、干支、宜、忌\n\n### 步骤2：生成利弊对仗\n- 利：从\"宜\"选关键词 → 改写6-8字\n- 弊：从\"忌\"选关键词 → 改写6-8字\n- 要求：字数相等、对仗工整\n\n### 步骤3：生成轻盈背景图\n- 使用 coze-image-gen\n- Prompt: 纯抽象水墨，90%白色背景\n- 约束：绝对禁止文字、毛笔字、印章\n- 输出: /tmp/bg_YYYY-MM-DD_pure.jpg\n\n### 步骤4：VL 分析背景（待配置）\n- 状态：等待 VL_API_KEY\n- 默认：center（居中）\n\n### 步骤5：生成海报\n- 脚本: poster_template_fd_v2.py（Frontend Design 版）\n- 字体: 思源宋体粗体（480px） + 文泉驿正黑锐利（40px）\n- 颜色: 深墨色系\n- 输出: posters/poster-YYYY-MM-DD.jpg\n\n### 步骤6：PIL 基本检查\n- 检查尺寸、深色像素、文字区域\n\n### 步骤7：发送到美学群\n- 目标：oc_95076f564f595dc80ae416c8221ad806\n\n### 步骤8：记录到日记\n- 路径：memory/YYYY-MM-DD.md\n\n---\n\n**重要提醒**：\n- 背景必须纯抽象水墨，禁止文字/印章\n- 使用 Frontend Design 字体方案\n- 避免重叠（数字和农历）\n- 留白 > 60%"
+        "message": "执行今日八字合盘海报生成任务：\n\n## ⭐ 完整工作流程（现代设计版）\n\n参考文档：/workspace/projects/workspace-aesthetic/HEARTBEAT.md\n\n### 步骤1：获取今日干支 + 宜忌\n- 使用 Coze web search 搜索今日八字\n- 提取：公历、农历、干支、宜、忌\n\n### 步骤2：八字合盘分析\n- 弗尼八字：乙丑 丙戌 戊申\n- 将今日八字与弗尼八字合盘\n- 分析五行相生相克\n- 生成针对性宜忌\n\n### 步骤3：生成对仗宜忌\n- 根据合盘结果，改写成对仗的宜忌\n- 要求：字数相等（6-8字），结构相同，对仗工整\n\n### 步骤4：生成海报（核心！）\n- 脚本: python3 /workspace/projects/workspace-aesthetic/poster_grouped.py YYYY-MM-DD\n- 字体方案：现代无衬线（Noto Sans Regular）\n- 主数字字号：height * 0.30（超大，视觉焦点）\n- 布局：居中对齐，信息聚合\n- 颜色：深灰色系，简洁现代\n- 输出: posters/poster-YYYY-MM-DD.jpg\n\n### 步骤5：发送到美学群\n- 目标：oc_95076f564f595dc80ae416c8221ad806\n\n### 步骤6：记录到日记\n- 路径：memory/YYYY-MM-DD.md\n\n---\n\n**重要提醒**：\n- 必须使用 poster_grouped.py 脚本\n- 纯色背景，避免图形压到字\n- 信息聚合居中，一眼看懂\n- 超大数字作为视觉焦点\n- 完整日期信息（月份+星期+年份）聚合在数字下方"
       },
       "delivery": {
         "mode": "announce",
         "target": {
           "channel": "feishu",
           "accountId": "main",
-          "peer": {
-            "kind": "group",
-            "id": "oc_95076f564f595dc80ae416c8221ad806"
-          }
+          "pairingId": "main"
         }
       }
     },
@@ -45,17 +42,14 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "执行八字合盘海报任务 GitHub 同步：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/sync-to-github.sh\n\n同步内容：\n- 工作流文档（WORKFLOW.md）\n- 字体策略（docs/font-strategy.md）\n- VL 实施计划（docs/vl-implementation-plan.md）\n- 海报生成脚本（scripts/poster_template_fd_v2.py）\n- Cron 配置（cron/jobs.json）\n- 记忆文件（memory/）\n\n注意：每两天自动同步一次，确保工作流不会丢失。"
+        "message": "执行八字合盘海报任务 GitHub 同步：\n\n运行脚本：bash /workspace/projects/workspace-aesthetic/scripts/sync-to-github.sh\n\n同步内容：\n- HEARTBEAT.md（最新工作流）\n- poster_grouped.py（海报脚本）\n- Cron 配置（cron/jobs.json）\n- 记忆文件（memory/）\n\n注意：每两天自动同步一次，确保工作流不会丢失。"
       },
       "delivery": {
         "mode": "announce",
         "target": {
           "channel": "feishu",
           "accountId": "main",
-          "peer": {
-            "kind": "group",
-            "id": "oc_95076f564f595dc80ae416c8221ad806"
-          }
+          "pairingId": "main"
         }
       }
     },
