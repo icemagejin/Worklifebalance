@@ -8,7 +8,7 @@
       "enabled": true,
       "createdAtMs": 1772847000000,
       "schedule": {
-        "expr": "10 9 * * *",
+        "expr": "15 8 * * *",
         "kind": "cron",
         "tz": "Asia/Shanghai"
       },
@@ -16,7 +16,7 @@
       "wakeMode": "now",
       "payload": {
         "kind": "agentTurn",
-        "message": "执行今日八字合盘海报生成任务：\n\n## ⭐ 完整工作流程（现代设计版）\n\n参考文档：/workspace/projects/workspace-aesthetic/HEARTBEAT.md\n\n### 步骤1：获取今日干支 + 宜忌\n- 使用 Coze web search 搜索今日八字\n- 提取：公历、农历、干支、宜、忌\n\n### 步骤2：八字合盘分析\n- 弗尼八字：乙丑 丙戌 戊申\n- 将今日八字与弗尼八字合盘\n- 分析五行相生相克\n- 生成针对性宜忌\n\n### 步骤3：生成对仗宜忌\n- 根据合盘结果，改写成对仗的宜忌\n- 要求：字数相等（6-8字），结构相同，对仗工整\n\n### 步骤4：生成海报（核心！）\n- 脚本: python3 /workspace/projects/workspace-aesthetic/poster_grouped.py YYYY-MM-DD\n- 字体方案：现代无衬线（Noto Sans Regular）\n- 主数字字号：height * 0.30（超大，视觉焦点）\n- 布局：居中对齐，信息聚合\n- 颜色：深灰色系，简洁现代\n- 输出: posters/poster-YYYY-MM-DD.jpg\n\n### 步骤5：发送到美学群\n- 目标：oc_95076f564f595dc80ae416c8221ad806\n\n### 步骤6：记录到日记\n- 路径：memory/YYYY-MM-DD.md\n\n---\n\n**重要提醒**：\n- 必须使用 poster_grouped.py 脚本\n- 纯色背景，避免图形压到字\n- 信息聚合居中，一眼看懂\n- 超大数字作为视觉焦点\n- 完整日期信息（月份+星期+年份）聚合在数字下方"
+        "message": "执行今日八字合盘海报生成任务：\n\n## ⭐ 完整工作流程（微纹理版）\n\n参考文档：/workspace/projects/workspace-aesthetic/HEARTBEAT.md\n\n### 步骤1：获取今日干支 + 宜忌\n- 使用 Coze web search 搜索今日八字\n- 提取：公历、农历、干支、宜、忌\n\n### 步骤2：八字合盘分析\n- 弗尼八字：乙丑 丙戌 戊申\n- 将今日八字与弗尼八字合盘\n- 分析五行相生相克\n- 生成针对性宜忌\n\n### 步骤3：生成对仗宜忌\n- 根据合盘结果，改写成对仗的宜忌\n- 要求：字数相等（6-8字），结构相同，对仗工整\n\n### 步骤4：生成海报（核心！）\n- 脚本: python3 /workspace/projects/workspace-aesthetic/poster_grouped.py YYYY-MM-DD\n- 字体方案：现代无衬线（Noto Sans Regular）\n- 主数字字号：height * 0.30（超大，视觉焦点）\n- 背景：微纹理（150个小圆点 + 20条细线）\n- 布局：居中对齐，信息聚合\n- 颜色：暖白背景 + 深灰文字\n- 输出: posters/poster-YYYY-MM-DD.jpg\n\n### 步骤5：发送到美学群\n- 目标：oc_95076f564f595dc80ae416c8221ad806\n\n### 步骤6：记录到日记\n- 路径：memory/YYYY-MM-DD.md\n\n---\n\n**重要提醒**：\n- 必须使用 poster_grouped.py 脚本\n- 微纹理背景（有设计感但不抢焦点）\n- 信息聚合居中，一眼看懂\n- 超大数字作为视觉焦点\n- 完整日期信息（月份+星期+年份）聚合在数字下方\n- 使用 textbbox 实际bottom位置，确保无文字重叠"
       },
       "delivery": {
         "mode": "announce",
